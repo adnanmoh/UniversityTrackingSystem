@@ -1,0 +1,153 @@
+﻿  @{
+    @model StudentVM
+    @inject IRepositoryManager repository
+
+    ViewData["Title"] = "Student Details";
+
+    List<GradeVM> data = (List<GradeVM>)ViewData["Data"];
+    var group = await repository.GroupRepository.GetObjById(Model.GroupId);
+
+    var TeacherList = new List<Teacher>();
+    var teacherRes = await repository.TeacherRepository.GetAll();
+
+    if (teacherRes.Count > 0)
+    {
+        TeacherList = teacherRes.ToList();
+    }
+
+    var YearList = new List<Year>();
+    var yearRes = await repository.YearRepository.GetAll();
+    if (yearRes.Count > 0)
+    {
+        YearList = yearRes.ToList();
+    }
+
+    var SubjectList = new List<Subject>();
+    var SubjectRes = await repository.SubjectRepository.GetAll();
+    if (SubjectRes.Count > 0)
+    {
+        SubjectList = SubjectRes.ToList();
+    }
+
+
+
+
+
+
+    int GradeCount;
+
+
+    if (data == null)
+    {
+        GradeCount = 0;
+    }
+    else
+    {
+        GradeCount = data.Count();
+    }
+
+}
+
+
+
+
+
+<!--Start Main content container-->
+<div class="main_content_container">
+    <div class="main_container  main_menu_open">
+        <!--Start system bath-->
+        <div class="home_pass hidden-xs">
+            <ul>
+                <li class="bring_right"><span class="glyphicon glyphicon-home "></span></li>
+                <li class="bring_right"><a asp-action="index">إدارة الطلاب</a></li>
+                <li class="bring_right"><a asp-action="index">البحث عن الطالب</a></li>
+                <li class="bring_right"><a href="">تفاصيل الطالب @Model.Name</a></li>
+            </ul>
+        </div>
+        <!--/End system bath-->
+        <div class="page_content">
+            <div class="page_content">
+
+                <div class="card border-primary mb-3 ">
+                    <div style="margin: 40px 25px;background-color: #001c39;" class="card-header  bg-primary text-white text-center">
+                        <h3 style="padding: 10px; ">تفاصيل الطالب</h3>
+                    </div>
+                    <div class="card-body text-primary ">
+                        <div class="row" style="margin: 5px 40px ;">
+                            <div class="col-md-12 " style="font-size: 20px;">
+                                <h3 class="card-title"><strong>@Model.Name</strong></h3>
+                                <br>
+                                <p class="card-text"><strong>رقم الطالب : </strong>@Model.StudentId</p>
+                                <p class="card-text"><strong>رقم الهاتف : </strong> @Model.Phone</p>
+                                <p class="card-text"><strong>الرقم الوطني: </strong>@Model.IdNumber</p>
+                                <p class="card-text"><strong>المجموعة: </strong>@group.Name</p>
+                                <a asp-action="Edit" asp-route-Id="@Model.StudentId" class="btn btn-outline-primary btn-block add-new">تعديل البيانات</a>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div style="margin: 40px 25px;background-color: #001c39;" class="card-header  bg-primary text-white text-center">
+                        <h3 style="padding: 10px; ">درجات الطالب</h3>
+                    </div>
+                    @if (TempData.ContainsKey("info"))
+                    {
+
+                        <div class="alert alert-warning  h4" role="alert">@TempData["info"]</div>
+                    }
+                        @if (GradeCount > 0)
+                        {
+                            <div class="wrap">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>#</td>
+                                        <td style="width: 250px;">المادة</td>
+                                        <td>المدرس</td>
+                                        <td>السنة</td>
+                                        <td>درجة الحضور</td>
+                                        <td>درجة الاختبار</td>
+                                        <td>درجة المشاركة</td>
+                                        <td>الحالة</td>
+
+                                    </tr>
+
+                                @{
+                                    var count = 1;
+                                    foreach (var i in data)
+                                    {
+                                        var TeacherName = TeacherList.FirstOrDefault(g => g.TeacherId == i.TeacherId)?.Name ?? "غير معروف";
+                                        var YearName = YearList.FirstOrDefault(g => g.YearId == i.YearId).Year1;
+                                        var SubjectName = SubjectList.FirstOrDefault(g => g.SubjectId == i.SubjectId)?.Name ?? "غير معروف";
+                                            <tr>
+                                                <td>@count</td>
+                                                <td>@SubjectName</td>
+                                                <td>@TeacherName</td>
+                                                <td>@YearName</td>
+                                                <td>@i.Attendance</td>
+                                                <td>@i.Exam</td>
+                                                <td>@i.participation</td>
+                                                <td>
+                                                    @if(i.IsPosted)
+                                                    {
+                                                        <span class=" text-success">تم النشر</span>
+                                                    }else
+                                                    {
+                                                        <span class=" text-danger">لم تنشر</span>
+                                                    }
+                                                </td>
+                                               
+                                            </tr>
+                                            count++;
+                                        }
+                                    }
+
+                                </table>
+                            </div>
+                        }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+    <!--/End Main content container-->

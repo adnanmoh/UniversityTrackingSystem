@@ -1,0 +1,157 @@
+﻿@using Microsoft.AspNetCore.Identity
+@{
+    @inject UserManager<SysUser> repository
+    var user = await repository.GetUserAsync(User);
+}
+
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"]</title>
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/icon.css" rel="stylesheet">
+    <link href="~/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />    
+
+    <link href="~/css/ar.css" rel="stylesheet" class="lang_css arabic">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="container-fluid">
+        <!--Start header-->
+        <div class="row header_section">
+            <div class="col-sm-3 col-xs-12 logo_area bring_right">
+                <span class="glyphicon glyphicon-align-justify bring_left open_close_menu" data-toggle="tooltip"
+                      data-placement="right" title="Tooltip on left"></span>
+
+            </div>
+            <div class="col-sm-3 col-xs-12 head_buttons_area bring_right hidden-xs">
+            </div>
+
+
+            <div class=" col-sm-4 col-xs-12 user_header_area bring_left left_text">
+
+
+                <div class="user_info inline-block">
+                    <span class="h4 nomargin user_name">@user.Name</span>
+                    <img src="~/img/user.jpg" alt="" class="img-circle">
+
+
+
+                </div>
+
+            </div>
+        </div>
+        <!--/End header-->
+        <!--Start body container section-->
+        <div class="row container_section">
+
+            <!--Start left sidebar-->
+            <div class="user_details close_user_details  bring_left">
+                <div class="user_area">
+
+                    <img class="img-thumbnail img-rounded bring_right" src="~/img/user.jpg">
+
+                    <h1 class="h3">@user.Name</h1>
+
+                </div>
+                <div class="main_sidebar_wrapper">
+
+
+
+
+                    <ul>
+                        <li><span class="glyphicon glyphicon-home"></span><a  asp-controller="Account" asp-action="MyAccount">حسابي</a></li>
+                        <li><span class="glyphicon glyphicon-log-out"></span><a asp-controller="Account" asp-action="Logout">تسجيل الخروج</a></li>
+
+                    </ul>
+                </div>
+            </div>
+            <!--/End left sidebar-->
+            <!--Start Side bar main menu-->
+            <div class="main_sidebar bring_right">
+                <div class="main_sidebar_wrapper">
+
+
+
+
+                    <ul>
+                        <li><span class="fa fa-home"></span><a  asp-controller="Home" asp-action="Index">الصفحة الرئيسية</a></li>
+                        
+                        <li>
+                            <span class="fa fa-users"></span><a href="">إدارة الطلاب</a>
+                            <ul class="drop_main_menu">
+                                <li><a asp-controller="Student" asp-action="Index">عرض الكل</a></li>
+                                <li><a asp-controller="Student" asp-action="Create">إضافة جديد</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="fa fa-users"></span><a href="">إدارة المدرسين</a>
+                            <ul class="drop_main_menu">
+                                <li><a asp-controller="Teacher" asp-action="Index">عرض الكل</a></li>
+                                <li><a asp-controller="Teacher" asp-action="Create">إضافة جديد</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="fa fa-users"></span><a href="">إدارة المجموعات</a>
+                            <ul class="drop_main_menu">
+                                <li><a asp-controller="Group" asp-action="Index">عرض الكل</a></li>
+                                <li><a asp-controller="Group" asp-action="Create">إضافة جديد</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="fa fa-graduation-cap"></span><a href="">الإدارة الدراسية</a>
+                            <ul class="drop_main_menu">
+                                <li><a asp-controller="Subject" asp-action="Index">المواد الدراسية</a></li>
+                                <li><a asp-controller="Schedule" asp-action="Index">الجداول الدراسية</a></li>
+                                <li><a asp-controller="Lecture" asp-action="Index">المحاضرات</a></li>
+                                <li><a asp-controller="Teaching" asp-action="Index">التدريس</a></li>
+                            </ul>
+                        </li>
+                        <li><span class="fa fa-calendar"></span><a asp-controller="Year" asp-action="Index">السنوات الدراسية</a></li>
+                        <li><span class="fa fa-calendar"></span><a asp-controller="Term" asp-action="Index">الأترام الدراسية</a></li>
+                        <li>
+                            <span class="fa fa-university"></span><a href="">إدارة الكليات</a>
+                            <ul class="drop_main_menu">
+                                <li><a asp-controller="College" asp-action="Index">الكليات</a></li>
+                                <li><a asp-controller="Major" asp-action="Index">التخصصات الدراسية</a></li>
+                                <li><a asp-controller="Level" asp-action="Index">المستويات الدراسية</a></li>
+                            </ul>
+                        </li>
+                 
+                        <li>
+                            <span class="fa fa-user-times"></span><a href="">إدارة مستخدمي النظام</a>
+                            <ul class="drop_main_menu">
+                                <li><a asp-controller="Account" asp-action="Index">عرض الكل</a></li>
+                                <li><a asp-controller="Account" asp-action="Create">إضافة جديد</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <!--/End side bar main menu-->
+           
+                    @RenderBody()
+               
+
+      </div>
+</div>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script type="text/javascript" src="~/js/jquery-2.1.4.min.js"></script>
+<script src="~/js/bootstrap.min.js"></script>
+<script src="~/js/js.js"></script>
+</body>
+
+</html>

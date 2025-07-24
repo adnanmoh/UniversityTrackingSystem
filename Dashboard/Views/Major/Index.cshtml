@@ -1,0 +1,94 @@
+﻿@{
+    @model List<MajorVM>
+    @inject IRepositoryManager repository
+    ViewData["Title"] = "Major Page";
+
+     var CollegeList = new List<College>();
+    var res = await repository.CollegeRepository.GetAll();
+
+    if (res.Count > 0 )
+    {
+        CollegeList = res.ToList();
+
+    }
+}
+
+
+<!--Start Main content container-->
+<div class="main_content_container">
+    <div class="main_container  main_menu_open">
+        <!--Start system bath-->
+        <div class="home_pass hidden-xs">
+            <ul>
+                <li class="bring_right"><span class="glyphicon glyphicon-home "></span></li>
+                <li class="bring_right"><a href="">التخصصات الدراسية</a></li>
+            </ul>
+        </div>
+        <!--/End system bath-->
+        <div class="page_content">
+
+            <h1 class="heading_title">التخصصات الدراسية<span class="fa fa-search " style="margin: 5px;"></span></h1>
+
+
+            <!--Start status alert-->
+            @if (TempData.ContainsKey("error"))
+            {
+
+                <div class="alert alert-danger h4" role="alert">@TempData["error"]</div>
+            }
+
+            @if (TempData.ContainsKey("msg"))
+            {
+                <div class="alert alert-success h5" role="alert">@TempData["msg"]</div>
+            }
+            <!--/End status alert-->
+
+           
+            <a class="bring_left add-new" asp-action="Create">اضافة تخصص دراسي جديدة <span style="padding-right: 8px;" class="fa fa-user-plus"></span></a>
+            @if (Model  !=null)
+            {
+                <div class="wrap">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>#</td>
+                            <td>رقم التخصص</td>
+                            <td>اسم التخصص</td>
+                            <td>الكلية</td>
+                            
+                            <td>التحكم</td>
+                        </tr>
+
+                        @{
+                            var count = 1;
+                            foreach (var i in Model)
+                            {
+                                var College = CollegeList.FirstOrDefault(g => g.CollegeId == i.CollegeId)?.Name ?? "غير معروف";
+                                <tr>
+                                    <td>@count</td>
+                                    <td>@i.MajorId</td>
+                                    <td>@i.Name</td>
+                                    <td>@College</td>
+                                   
+                                    <td>
+                                        <a asp-action="Edit" asp-route-Id="@i.MajorId" class="btn alert-info">تعديل <i class="fa fa-fw fa-edit"></i></a>
+                                        <a asp-action="AddSubjectForMajor" asp-route-Id="@i.MajorId" class="btn alert-warning">اضافة مواد دراسية <i class="fa fa-plus-circle"></i></a>
+                                        <a asp-action="Details" asp-route-Id="@i.MajorId" class="btn alert-success"><b>تفاصيل </b><i class="fa fa-fw  fa-address-card"> </i></a>
+
+                                    </td>
+                                </tr>
+                                count++;
+                            }
+                        }
+
+                    </table>
+                </div>
+            }
+
+            
+
+
+        </div>
+    </div>
+</div>
+
+<!--/End Main content container-->

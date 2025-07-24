@@ -1,0 +1,114 @@
+﻿@{
+    @model List<SubjectsInMajorsLevelVM>
+    @inject IRepositoryManager repository
+
+    ViewData["Title"] = "Subject In Major Details";
+
+    var TermList = new List<Term>();
+    var termRes = await repository.TermRepository.GetAll();
+    if (termRes.Count > 0)
+    {
+        TermList = termRes.ToList();
+    }
+
+    var LevelList = new List<Level>();
+    var LevelRes = await repository.LevelRepository.GetAll();
+    if (LevelRes.Count > 0)
+    {
+        LevelList = LevelRes.ToList();
+    }
+
+    var SubjectList = new List<Subject>();
+    var SubjectRes = await repository.SubjectRepository.GetAll();
+    if (SubjectRes.Count > 0)
+    {
+        SubjectList = SubjectRes.ToList();
+    }
+    Major major = null;
+    if (@Model.Count > 0)
+    {
+        major = await repository.MajorRepository.GetObjById(@Model[0].MajorId);
+
+    }
+
+}
+
+
+
+<!--Start Main content container-->
+<div class="main_content_container">
+    <div class="main_container  main_menu_open">
+        <!--Start system bath-->
+        <div class="home_pass hidden-xs">
+            <ul>
+                <li class="bring_right"><span class="glyphicon glyphicon-home "></span></li>
+                <li class="bring_right"><a asp-Action="index">التخصصات الدراسية</a></li>
+                 <li class="bring_right"><a asp-Action="AddSubjectForMajor" asp-route-id="@major.MajorId">اضافة مواد للتخصص الدراسي</a></li>
+
+                <li class="bring_right"><a> تفاصيل المواد الدراسية للتخصص</a></li>
+            </ul>
+        </div>
+        <!--/End system bath-->
+        <div class="page_content">
+
+            <h1 class="heading_title">تفاصيل المواد الدراسية للتخصص</h1>
+
+
+            <!--Start status alert-->
+            @if (TempData.ContainsKey("error"))
+            {
+
+                <div class="alert alert-danger h4" role="alert">@TempData["error"]</div>
+            }
+
+            @if (TempData.ContainsKey("msg"))
+            {
+                <div class="alert alert-success h5" role="alert">@TempData["msg"]</div>
+            }
+            <!--/End status alert-->
+            <a class="bring_left add-new" asp-action="AddSubjectForMajor" asp-route-id="@major.MajorId">اضافة مواد دراسية جديدة <span style="padding-right: 8px;" class="fa fa-user-plus"></span></a>
+            @if (Model != null)
+            {
+                @foreach (var levelGroup in Model.GroupBy(i => i.LevelId))
+                {
+                    var levelName = LevelList.FirstOrDefault(g => g.LevelId == levelGroup.Key)?.Name ?? "غير معروف";
+                     int count = 1;
+                    <div class="wrap">
+                        <table class="table table-bordered">
+                            <h1 class="heading_title_table">المستوى @levelName</h1>
+                            <tr>
+                                <td>#</td>
+                                <td style="width: 250px;">التخصص</td>
+                                <td>المادة الدراسية</td>
+                                <td>الترم</td>
+                            </tr>
+                           
+                            @foreach (var item in levelGroup)
+                            {
+                                var term = TermList.FirstOrDefault(g => g.TermId == item.TermId)?.Name ?? "غير معروف";
+                                var subject = SubjectList.FirstOrDefault(g => g.SubjectId == item.SubjectId)?.Name ?? "غير معروف";
+                                var majorName = major.Name;
+
+                                <tr>
+
+                                    <td>@count</td>
+                                    <td>@majorName</td>
+                                    <td>@subject</td>
+                                    <td>@term</td>
+                                </tr>
+                                count++;
+                            }
+                        </table>
+                    </div>
+                }
+            }
+
+
+
+
+
+        </div>
+    </div>
+</div>
+
+<!--/End Main content container-->

@@ -1,0 +1,117 @@
+﻿@{
+    @model LoginVM
+    ViewData["Title"] = "Login Page";
+    Layout = null;
+
+}
+
+<!DOCTYPE html>
+
+
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Panal</title>
+
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/style.css" rel="stylesheet">
+    <link href="~/css/icon.css" rel="stylesheet">
+    <link id="css" href="~/css/light_style.css" rel="stylesheet">
+
+</head>
+<body class="body">
+
+
+    <!--Start status alert-->
+    @if (TempData.ContainsKey("error"))
+    {
+
+        <div class="alert alert-danger h4" role="alert">@TempData["error"]</div>
+    }
+
+    @if (TempData.ContainsKey("msg"))
+    {
+        <div class="alert alert-success h5" role="alert">@TempData["msg"]</div>
+    }
+    <!--/End status alert-->
+    <!--Start Login Form-->
+    <div class="login_area">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="logo-inh">
+                        <img class="logo" src="~/img/logo.png" alt="">
+                    </div>
+                </div>
+                <div id="test" class="modal-body notvis">
+                    <h4 style="display: grid;justify-content: center;">ادخل رقم الحساب وكلمة المرور</h4>
+                    <form id="login-form" method="post" asp-action="Login" style="direction: ltr">
+                        <div class="input-group input-group-lg ">
+                            <input asp-for="UserName" class="form-control" placeholder="اسم المستخدم" aria-describedby="username">
+                            <span  class="input-group-addon glyphicon glyphicon-user" id="username"></span>
+                        </div>
+                            <span class="text-danger" asp-validation-for="UserName"></span>
+                        <div class="input-group input-group-lg">
+                            <input asp-for="Password" type="password" class="form-control" id="password" placeholder="كلمة المرور" aria-describedby="password">
+
+
+                            <i onclick="togglePasswordVisibility()" class="input-group-addon glyphicon glyphicon-eye-close" id="password"></i>
+
+                        </div>
+                            <span asp-validation-for="Password" class="text-danger" ></span>
+
+
+                        <div class="modal-footer ">
+                            <button type="reset" class="btn btn-default">الغاء</button>
+                            <button type="submit" class="btn btn-primary">تسجيل دخول</button>
+                        </div>
+                    </form>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--End Login From-->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script type="text/javascript" src="~/js/jquery-1.9.1.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+
+
+    <!--Start Login Area Show Animation-->
+    <script type="text/javascript">
+                    $(document).ready(function () {
+                        $(".login_area").show(1000);
+                    });
+                    function togglePasswordVisibility() {
+          // حدد عنصر حقل كلمة المرور
+          var passwordInput = document.getElementById("password");
+
+          // حدد نوع حقل كلمة المرور الحالي
+          var currentType = passwordInput.type;
+
+          // إذا كان النوع الحالي مخفيًا، فقم بتغييره إلى نص
+          if (currentType === "password") {
+            passwordInput.type = "text";
+            passwordInput.classList.add("show-password");
+          }
+          // وإلا، فقم بتغييره إلى مخفي
+          else {
+            passwordInput.type = "password";
+            passwordInput.classList.remove("show-password");
+          }
+        }
+
+
+    </script>
+    <!--End Login Area Show Animation-->
+
+    <script type="text/javascript" src="~/js/jquery-2.1.4.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/js.js"></script>
+</body>
+</html>

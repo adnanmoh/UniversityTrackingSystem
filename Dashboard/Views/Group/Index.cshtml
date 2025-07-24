@@ -1,0 +1,208 @@
+﻿@{
+    ViewData["Title"] = "Group Page";
+    @model SearchGroup ;
+    @inject IRepositoryManager repository
+
+    List<SearchGroup> data = (List<SearchGroup>)ViewData["Data"];
+    var YearList = new List<Year>();
+    var resYear = await repository.YearRepository.GetAll();
+    if (resYear.Count > 0)
+    {
+        YearList = resYear.ToList();
+
+    }
+
+    var LevelList = new List<Level>();
+    var resLevel = await repository.LevelRepository.GetAll();
+    if (resLevel.Count > 0)
+    {
+        LevelList = resLevel.ToList();
+    }
+
+    var MajorList = new List<Major>();
+    var resMajor = await repository.MajorRepository.GetAll();
+    if (resMajor.Count > 0)
+    {
+        MajorList = resMajor.ToList();
+    }
+
+    var GroupList = new List<Group>();
+    var resMGroup = await repository.GroupRepository.GetAllGroupsInCurrentYearAndItsParent();
+    if (resMajor.Count > 0)
+    {
+        GroupList = resMGroup.ToList();
+    }
+
+
+
+    int GroupCount;
+    if (data == null)
+    {
+        GroupCount = 0;
+    }
+    else
+    {
+        GroupCount = data.Count();
+    }
+
+
+}
+<!--Start Main content container-->
+<div class="main_content_container">
+    <div class="main_container  main_menu_open">
+        <!--Start system bath-->
+        <div class="home_pass hidden-xs">
+            <ul>
+                <li class="bring_right"><span class="glyphicon glyphicon-home "></span></li>
+                <li class="bring_right"><a href="">إدارة المجموعات</a></li>
+                <li class="bring_right"><a href="">البحث عن مجموعة</a></li>
+            </ul>
+        </div>
+        <!--/End system bath-->
+        <div class="page_content">
+
+            <h1 class="heading_title">البحث عن مجموعة <span class="fa fa-search " style="margin: 5px;"></span></h1>
+
+
+            <!--Start status alert-->
+            <!--/End status alert-->
+
+            <div class="form">
+                <form method="post" class="form-horizontal" asp-action="index">
+
+                    <div class="form-group">
+                        <label asp-for="YearId" class="col-sm-2 control-label bring_right left_text">السنة الدراسية</label>
+                        <div class="col-sm-10">
+                            <select id="input0" asp-for="YearId" class="form-control" asp-items='@new SelectList(YearList,"YearId","Year1")'>
+                                <option value="@null">اختر سنة دراسية ...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="additionalFilters" style="display:none;">
+                        <div class="form-group">
+                            <label asp-for="Name" class="col-sm-2 control-label bring_right left_text">اسم المجموعة</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Name" type="text" class="form-control" id="input1" placeholder="البحث بأسم المجموعة">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="GroupId" class="col-sm-2 control-label bring_right left_text"> رقم المجموعة</label>
+                            <div class="col-sm-10">
+                                <input asp-for="GroupId" type="number" class="form-control" id="input2" placeholder=" رقم المجموعة">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="LevelId" class="col-sm-2 control-label bring_right left_text">المستوى الدراسي</label>
+                            <div class="col-sm-10">
+                                <select id="input3" asp-for="LevelId" class="form-control" asp-items='@new SelectList(LevelList,"LevelId","Name")'>
+                                    <option value="@null">اختر مستوى دراسي ...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="MajorId" class="col-sm-2 control-label bring_right left_text">التخصص</label>
+                            <div class="col-sm-10">
+                                <select id="input4" asp-for="MajorId" class="form-control" asp-items='@new SelectList(MajorList,"MajorId","Name")'>
+                                    <option value="@null">اختر تخصص دراسي ...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ParentGroupId" class="col-sm-2 control-label bring_right left_text">المجموعة الاب</label>
+                            <div class="col-sm-10">
+                                <select id="input5" asp-for="ParentGroupId" class="form-control" asp-items='@new SelectList(GroupList,"GroupId","Name")'>
+                                    <option value="@null">اختر مجموعة ...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 text-center">
+                            <button type="submit" class="btn btn-primary"> البحث</button>
+                            <button type="button" class="btn btn-default" onclick="showFilters()"> <span class="fa fa-filter"></span></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            @if (GroupCount > 0)
+            {
+                <div class="wrap">
+                    <a class="bring_left add-new" asp-action="Create">اضافة مجموعة جديد <span style="padding-right: 8px;" class="fa fa-user-plus"></span></a>
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>#</td>
+                            <td>رقم المجموعة</td>
+                            <td>اسم المجموعة</td>
+                            <td>السنة الدراسية</td>
+                            <td>المستوى</td>
+                            <td>التخصص</td>
+                            <td>التحكم</td>
+                        </tr>
+
+                        @{
+                            var count = 1;
+                            foreach (var i in data)
+                            {
+                                var YearName = YearList.FirstOrDefault(g => g.YearId == i.YearId)?.Year1 ;
+                                var LevelName = LevelList.FirstOrDefault(g => g.LevelId == i.LevelId)?.Name ?? "غير معروف";
+                                var MajorName = MajorList.FirstOrDefault(g => g.MajorId == i.MajorId)?.Name ?? "غير معروف";
+                                <tr>
+                                    <td>@count</td>
+                                    <td>@i.GroupId</td>
+                                    <td>@i.Name</td>
+                                    <td>@YearName</td>
+                                    <td>@LevelName</td>
+                                    <td>@MajorName</td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-Id="@i.GroupId" class="btn alert-info">تعديل <i class="fa fa-fw fa-edit"></i></a>
+                                        <a asp-action="Details" asp-route-Id="@i.GroupId" class="btn alert-success"><b>تفاصيل </b><i class="fa fa-fw  fa-address-card"> </i></a>
+                                    </td>
+                                </tr>
+                                count++;
+                            }
+                        }
+
+                    </table>
+                </div>
+            }
+
+            <!--Start status alert-->
+            @if (TempData.ContainsKey("error"))
+            {
+
+                <div class="alert alert-danger h4" role="alert">@TempData["error"]</div>
+            }
+
+            @if (TempData.ContainsKey("msg"))
+            {
+                <div class="alert alert-success h5" role="alert">@TempData["msg"]</div>
+            }
+            <!--/End status alert-->
+
+
+        </div>
+    </div>
+</div>
+
+<!--/End Main content container-->
+
+<script>
+                function showFilters() {
+        var filters = document.getElementById('additionalFilters');
+        if (filters.style.display === 'none') {
+            filters.style.display = 'block';
+        } else {
+            // إخفاء الفورمات
+            filters.style.display = 'none';
+            // حذف البيانات من الفورمات
+            document.getElementById('input1').value = '';
+            document.getElementById('input2').value = '';
+            document.getElementById('input3').value = '';
+            document.getElementById('input4').value = '';
+            document.getElementById('input5').value = '';
+        }
+    }
+
+</script>

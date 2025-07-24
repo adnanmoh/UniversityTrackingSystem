@@ -1,0 +1,165 @@
+﻿@{
+    ViewData["Title"] = "Student Page";
+    @model SearchStudent ;
+    @inject IRepositoryManager repository
+
+    List<SearchStudent> data = (List<SearchStudent>)ViewData["Data"];
+    var GroupList = new List<Group>();
+    var GroupListAll = new List<Group>();
+    var res1 = await repository.GroupRepository.GetAllGroupsInCurrentYear();
+    var res2 = await repository.GroupRepository.GetAll();
+
+    if (res1.Count > 0 && res2.Count > 0)
+    {
+        GroupList = res1.ToList();
+        GroupListAll = res2.ToList();
+
+    }
+    int StudentCount;
+    if (data == null)
+    {
+        StudentCount = 0;
+    }
+    else
+    {
+        StudentCount = data.Count();
+    }
+
+
+    
+}
+<!--Start Main content container-->
+<div class="main_content_container">
+    <div class="main_container  main_menu_open">
+        <!--Start system bath-->
+        <div class="home_pass hidden-xs">
+            <ul>
+                <li class="bring_right"><span class="glyphicon glyphicon-home "></span></li>
+                <li class="bring_right"><a href="">إدارة الطلاب</a></li>
+                <li class="bring_right"><a href="">البحث عن الطالب</a></li>
+            </ul>
+        </div>
+        <!--/End system bath-->
+        <div class="page_content">
+
+            <h1 class="heading_title">البحث عن الطالب <span class="fa fa-search " style="margin: 5px;"></span></h1>
+
+
+            <!--Start status alert-->
+            <!--/End status alert-->
+
+            <div class="form">
+                <form method="post" class="form-horizontal" asp-action="index">
+                    <div class="form-group">
+                        <label asp-for="Name" class="col-sm-2 control-label bring_right left_text">اسم الطالب</label>
+                        <div class="col-sm-10">
+                            <input asp-for="Name" type="text" class="form-control" id="input0" placeholder="البحث بأسم الطالب">
+                        </div>
+                    </div>
+                    <div id="additionalFilters" style="display:none;">
+                        <div class="form-group">
+                            <label asp-for="StudentId" class="col-sm-2 control-label bring_right left_text"> رقم الطالب</label>
+                            <div class="col-sm-10">
+                                <input asp-for="StudentId" type="number" class="form-control" id="input2" placeholder=" رقم الطالب">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Phone" class="col-sm-2 control-label bring_right left_text"> رقم الهاتف </label>
+                            <div class="col-sm-10">
+                                <input asp-for="Phone" type="number" class="form-control" id="input3" placeholder="رقم الهاتف ">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="GroupId" class="col-sm-2 control-label bring_right left_text">المجموعة</label>
+                            <div class="col-sm-10">
+                                <select id="input4" asp-for="GroupId" class="form-control" asp-items='@new SelectList(GroupList,"GroupId","Name")'>
+                                    <option value="@null">اختر مجموعة...</option>
+                                </select>
+
+                                <span class="text-danger" asp-validation-for="GroupId"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 text-center">
+                            <button type="submit" class="btn btn-primary"> البحث</button>
+                            <button type="button" class="btn btn-default" onclick="showFilters()"> <span class="fa fa-filter"></span></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            @if (StudentCount > 0)
+            {
+                <div class="wrap">
+                    <a class="bring_left add-new" asp-action="Create">اضافة طالب جديد <span style="padding-right: 8px;" class="fa fa-user-plus"></span></a>
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>#</td>
+                            <td>رقم الطالب</td>
+                            <td>اسم الطالب</td>
+                            <td>رقم الهاتف</td>
+                            <td>المجموعة</td>
+                            <td>التحكم</td>
+                        </tr>
+
+                        @{
+                            var count = 1;
+                            foreach (var i in data)
+                            {
+                                var groupName = GroupListAll.FirstOrDefault(g => g.GroupId == i.GroupId)?.Name ?? "غير معروف";
+                                <tr>
+                                    <td>@count</td>
+                                    <td>@i.StudentId</td>
+                                    <td>@i.Name</td>
+                                    <td>@i.Phone</td>
+                                    <td>@groupName</td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-Id="@i.StudentId" class="btn alert-info">تعديل <i class="fa fa-fw fa-edit"></i></a>
+                                        <a asp-action="Details" asp-route-Id="@i.StudentId" class="btn alert-success"><b>تفاصيل </b><i class="fa fa-fw  fa-address-card"> </i></a>
+                                    </td>
+                                </tr>
+                                count++;
+                            }
+                        }
+
+                    </table>
+                </div>
+            }
+
+            <!--Start status alert-->
+            @if (TempData.ContainsKey("error"))
+            {
+
+                <div class="alert alert-danger h4" role="alert">@TempData["error"]</div>
+            }
+
+            @if (TempData.ContainsKey("msg"))
+            {
+                <div class="alert alert-success h5" role="alert">@TempData["msg"]</div>
+            }
+            <!--/End status alert-->
+
+
+        </div>
+    </div>
+</div>
+
+<!--/End Main content container-->
+
+<script>
+                function showFilters() {
+        var filters = document.getElementById('additionalFilters');
+        if (filters.style.display === 'none') {
+            filters.style.display = 'block';
+        } else {
+            // إخفاء الفورمات
+            filters.style.display = 'none';
+            // حذف البيانات من الفورمات
+            document.getElementById('input2').value = '';
+            document.getElementById('input3').value = '';
+            document.getElementById('input4').value = '';
+        }
+    }
+
+</script>

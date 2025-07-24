@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!--Start Main content container-->
+        <div class="main_content_container">
+            <div class="main_container  main_menu_open">
+                <!--Start system bath-->
+                <div class="home_pass hidden-xs">
+                    <ul>
+                        <li class="bring_right"><span class="glyphicon glyphicon-home "></span></li>
+                        <li class="bring_right"><a href="">الصفحة الرئيسية للوحة تحكم الموقع</a></li>
+                    </ul>
+                </div>
+                <!--/End system bath-->
+                <div class="page_content">
+                    <div class="page_content">
+                        <div class="quick_links text-center">
+                            <h1 class="heading_title">الوصول السريع</h1>
+                            <br />
+                            <a asp-controller="Student" asp-action="Create" >
+                                <h4>اضافة طالب</h4>
+                            </a>
+                            <a asp-controller="Teacher" asp-action="Create">
+                                <h4>اضافة مدرس</h4>
+                            </a>
+                            <a asp-controller="Group" asp-action="Create">
+                                <h4>اضافة مجموعة</h4>
+                            </a>
+                            <a asp-controller="Subject" asp-action="Create">
+                                <h4>اضافة مادة دراسية</h4>
+                            </a>
+                            <a asp-controller="Major" asp-action="Create">
+                                <h4>اضافة تخصص دراسي</h4>
+                            </a>
+                            <a asp-controller="Schedule" asp-action="CreateTeacherSchedule">
+                                <h4>اضافة جدول للمدرس</h4>
+                            </a>
+                            <a asp-controller="Schedule" asp-action="CreateStudentSchedule">
+                                <h4>اضافة جدول للطلاب</h4>
+                            </a>
+                            
+                    </div>
+                </div>
+            </div>
+            <!--/End Main content container-->
+
+
+        </div>
+        <!--/End body container section-->

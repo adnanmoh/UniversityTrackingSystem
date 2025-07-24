@@ -1,0 +1,177 @@
+﻿@{
+    ViewData["Title"] = "Subject Page";
+    @model SearchSubject ;
+    @inject ILectureForSubjectRepository repository
+    List<SearchSubject> data = (List<SearchSubject>)ViewData["Data"];
+   
+    int SubjectCount;
+    if (data == null)
+    {
+        SubjectCount = 0;
+    }
+    else
+    {
+        SubjectCount = data.Count();
+    }
+
+    var TypeList = new List<SelectListItem>
+    {
+        new SelectListItem { Text = "اساسي", Value = "اساسي" },
+        new SelectListItem { Text = "متطلب", Value = "متطلب" }
+    };
+
+    
+}
+<!--Start Main content container-->
+<div class="main_content_container">
+    <div class="main_container  main_menu_open">
+        <!--Start system bath-->
+        <div class="home_pass hidden-xs">
+            <ul>
+                <li class="bring_right"><span class="glyphicon glyphicon-home "></span></li>
+                <li class="bring_right"><a href="">إدارة المواد الدراسية</a></li>
+                <li class="bring_right"><a href="">البحث عن مادة دراسية</a></li>
+            </ul>
+        </div>
+        <!--/End system bath-->
+        <div class="page_content">
+
+            <h1 class="heading_title">البحث عن مادة دراسية <span class="fa fa-search " style="margin: 5px;"></span></h1>
+
+
+            <!--Start status alert-->
+            <!--/End status alert-->
+
+            <div class="form">
+                <form method="post" class="form-horizontal" asp-action="index">
+                    <div class="form-group">
+                        <label asp-for="Name" class="col-sm-2 control-label bring_right left_text">اسم المادة الدراسية</label>
+                        <div class="col-sm-10">
+                            <input asp-for="Name" type="text" class="form-control" id="input0" placeholder="البحث بأسم المادة الدراسية">
+                        </div>
+                    </div>
+                    <div id="additionalFilters" style="display:none;">
+                        <div class="form-group">
+                            <label asp-for="SubjectId" class="col-sm-2 control-label bring_right left_text"> رقم المادة الدراسية</label>
+                            <div class="col-sm-10">
+                                <input asp-for="SubjectId" type="number" class="form-control" id="input2" placeholder=" رقم المادة الدراسية">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Type" class="col-sm-2 control-label bring_right left_text">نوع المادة</label>
+                            <div class="col-sm-10">
+                                <select id="input3" asp-for="Type" class="form-control" asp-items='@new SelectList(TypeList,"Value","Text")'>
+                                    <option value="@null">اختر نوع المادة...</option>
+                                </select>
+
+                                <span class="text-danger" asp-validation-for="Type"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 text-center">
+                            <button type="submit" class="btn btn-primary"> البحث</button>
+                            <button type="button" class="btn btn-default" onclick="showFilters()"> <span class="fa fa-filter"></span></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <a class="bring_left add-new" asp-action="Create">اضافة مادة دراسية جديدة <span style="padding-right: 8px;" class="fa fa-user-plus"></span></a>
+            @if (SubjectCount > 0)
+            {
+                <div class="wrap">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>#</td>
+                            <td>رقم المادة </td>
+                            <td>اسم المادة </td>
+                            <td>نوع المادة </td>
+                            <td>عدد المحاضرات</td>
+                            <td>الحالة</td>
+                            <td>التحكم</td>
+                        </tr>
+
+                        @{
+                            var count = 1;
+                            foreach (var i in data)
+                            {
+                                var numberOfLecture = await repository.GetNumberOfLectureForOneSubject(i.SubjectId.Value);
+                                <tr>
+                                    <td>@count</td>
+                                    <td>@i.SubjectId</td>
+                                    <td>@i.Name</td>
+                                    <td>@i.Type</td>
+                                    <td>@numberOfLecture</td>
+                                    <td>
+                                        @if(i.Status == true)
+                                        {
+                                            <span class=" text-success">نشط</span>
+                                        }else
+                                        {
+                                            <span class=" text-danger">غير نشط</span>
+                                        }
+                                    
+                                    
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@i.SubjectId" class="btn alert-info">تعديل <i class="fa fa-fw fa-edit"></i></a>
+                                        <a asp-action="EditLect" asp-all-route-data='@new Dictionary<string, string>{{"id",@i.SubjectId.ToString()},{"NumberOfLecture",numberOfLecture.ToString()}}' class="btn alert-primary">تعديل المحاضرات <i class="fa fa-fw fa-edit"></i></a>
+                                         @if(i.Status == true)
+                                            {
+                                                <a asp-action="ChangeStatus" asp-all-route-data='@new Dictionary<string, string>{{"id",@i.SubjectId.ToString()},{"status","false"}}' class="btn alert-danger"><b>ايقاف</b><i class="fa fa-fw fa-pause"> </i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="ChangeStatus" asp-all-route-data='@new Dictionary<string, string>{{"id",@i.SubjectId.ToString()},{"status","true"}}' class="btn alert-success"><b>تفعيل</b><i class="fa fa-fw fa-play"> </i></a>
+                                                
+                                            }
+
+                                    </td>
+                                </tr>
+                                count++;
+                            }
+                        }
+
+                    </table>
+                </div>
+            }
+            <br />
+            <br />
+
+            <!--Start status alert-->
+            @if (TempData.ContainsKey("error"))
+            {
+
+                <div class="alert alert-danger h4" role="alert">@TempData["error"]</div>
+            }
+
+            @if (TempData.ContainsKey("msg"))
+            {
+                <div class="alert alert-success h5" role="alert">@TempData["msg"]</div>
+            }
+            <!--/End status alert-->
+
+
+        </div>
+    </div>
+</div>
+
+<!--/End Main content container-->
+
+<script>
+                function showFilters() {
+        var filters = document.getElementById('additionalFilters');
+        if (filters.style.display === 'none') {
+            filters.style.display = 'block';
+        } else {
+            // إخفاء الفورمات
+            filters.style.display = 'none';
+            // حذف البيانات من الفورمات
+            document.getElementById('input2').value = '';
+            document.getElementById('input3').value = '';
+            document.getElementById('input4').value = '';
+        }
+    }
+
+</script>

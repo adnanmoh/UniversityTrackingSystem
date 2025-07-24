@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Schedule Page";
+}
+
+<!--Start Main content container-->
+        <div class="main_content_container">
+            <div class="main_container  main_menu_open">
+                <!--Start system bath-->
+                <div class="home_pass hidden-xs">
+                    <ul>
+                        <li class="bring_right"><span class="glyphicon glyphicon-home "></span></li>
+                        <li class="bring_right"><a href="">الجداول الدراسية</a></li>
+                    </ul>
+                </div>
+                <!--/End system bath-->
+                <div class="page_content">
+                    <div class="page_content">
+                        <div class="quick_links text-center">
+                            <h1 class="heading_title">الجداول الدراسية</h1>
+                            <br />
+                            <br />
+                            <a asp-action="StudentSchedule" >
+                                <h4>جداول الطلاب</h4>
+                            </a>
+                            <a asp-action="TeacherSchedule" >
+                                <h4>جداول المدرسين</h4>
+                            </a>
+                            
+                            
+                    </div>
+                </div>
+            </div>
+            <!--/End Main content container-->
+
+
+        </div>
+        <!--/End body container section-->

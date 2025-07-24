@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniversityTrackingSystem", "RestAPI\UniversityTrackingSystem.csproj", "{EA95A8DD-D507-4A7C-8B48-B3E0007CF9D6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UAppDashboard", "Dashboard\UAppDashboard.csproj", "{606B96D3-45C4-4E4F-8996-20864299C3D1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EA95A8DD-D507-4A7C-8B48-B3E0007CF9D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA95A8DD-D507-4A7C-8B48-B3E0007CF9D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA95A8DD-D507-4A7C-8B48-B3E0007CF9D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA95A8DD-D507-4A7C-8B48-B3E0007CF9D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{606B96D3-45C4-4E4F-8996-20864299C3D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{606B96D3-45C4-4E4F-8996-20864299C3D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{606B96D3-45C4-4E4F-8996-20864299C3D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{606B96D3-45C4-4E4F-8996-20864299C3D1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {894BD7F8-3302-49E8-BBFE-958E4793E076}
+	EndGlobalSection
+EndGlobal

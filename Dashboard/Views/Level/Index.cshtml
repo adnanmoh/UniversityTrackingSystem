@@ -1,0 +1,79 @@
+﻿@{
+    @model List<LevelVM>
+    ViewData["Title"] = "Level Page";
+}
+
+
+<!--Start Main content container-->
+<div class="main_content_container">
+    <div class="main_container  main_menu_open">
+        <!--Start system bath-->
+        <div class="home_pass hidden-xs">
+            <ul>
+                <li class="bring_right"><span class="glyphicon glyphicon-home "></span></li>
+                <li class="bring_right"><a href="">المستويات الدراسية</a></li>
+            </ul>
+        </div>
+        <!--/End system bath-->
+        <div class="page_content">
+
+            <h1 class="heading_title">المستويات الدراسية<span class="fa fa-search " style="margin: 5px;"></span></h1>
+
+
+            <!--Start status alert-->
+            @if (TempData.ContainsKey("error"))
+            {
+
+                <div class="alert alert-danger h4" role="alert">@TempData["error"]</div>
+            }
+
+            @if (TempData.ContainsKey("msg"))
+            {
+                <div class="alert alert-success h5" role="alert">@TempData["msg"]</div>
+            }
+            <!--/End status alert-->
+
+           
+            <a class="bring_left add-new" asp-action="Create">اضافة مستوى دراسي جديد <span style="padding-right: 8px;" class="fa fa-user-plus"></span></a>
+            @if (Model  !=null)
+            {
+                <div class="wrap">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>#</td>
+                            <td>رقم المستوى</td>
+                            <td>اسم المستوى</td>
+                            <td>التحكم</td>
+                        </tr>
+
+                        @{
+                            var count = 1;
+                            foreach (var i in Model)
+                            {
+                                <tr>
+                                    <td>@count</td>
+                                    <td>@i.LevelId</td>
+                                    <td>@i.Name</td>
+                                    
+                                   
+                                    <td>
+                                        <a asp-action="Edit" asp-route-Id="@i.LevelId" class="btn alert-info">تعديل <i class="fa fa-fw fa-edit"></i></a>
+                                        
+                                    </td>
+                                </tr>
+                                count++;
+                            }
+                        }
+
+                    </table>
+                </div>
+            }
+
+            
+
+
+        </div>
+    </div>
+</div>
+
+<!--/End Main content container-->
