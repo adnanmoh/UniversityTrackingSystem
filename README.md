@@ -74,7 +74,7 @@ Generated automatically by .NET during build. These folders are not usually comm
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/UniversityTrackingSystem.git
+   git clone https://github.com/adnanmoh/UniversityTrackingSystem.git
    ```
 
 2. Update `appsettings.json` with your SQL Server connection string.
